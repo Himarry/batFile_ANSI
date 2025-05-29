@@ -3,6 +3,8 @@ setlocal EnableDelayedExpansion
 chcp 932 > nul
 title batファイルエンコード変換ツール
 
+echo バージョン: 1.1 (エンコーディング自動検出機能追加)
+
 echo ================================================
 echo   batファイルのエンコードをANSI(CP932)に変換するツール
 echo ================================================
@@ -61,8 +63,8 @@ echo 処理中: "%file%"
 rem 一時ファイルを作成
 set "temp_file=%TEMP%\temp_convert_%RANDOM%.txt"
 
-rem ファイルをANSI(CP932)エンコードで書き出す
-powershell -Command "$content = Get-Content -Path '%file%' -Raw; [System.IO.File]::WriteAllText('%temp_file%', $content, [System.Text.Encoding]::GetEncoding(932))"
+rem よく使われるエンコーディングを自動検出してANSI(CP932)エンコードで書き出す
+powershell -Command "$ErrorActionPreference = 'Stop'; try { $bytes = [System.IO.File]::ReadAllBytes('%file%'); $utf8 = New-Object System.Text.UTF8Encoding $false; if ($bytes.Length -ge 3 -and $bytes[0] -eq 239 -and $bytes[1] -eq 187 -and $bytes[2] -eq 191) { $content = $utf8.GetString($bytes, 3, $bytes.Length - 3); } else { if ($bytes.Length -ge 2 -and $bytes[0] -eq 255 -and $bytes[1] -eq 254) { $content = [System.Text.Encoding]::Unicode.GetString($bytes, 2, $bytes.Length - 2); } else { if ($bytes.Length -ge 2 -and $bytes[0] -eq 254 -and $bytes[1] -eq 255) { $content = [System.Text.Encoding]::BigEndianUnicode.GetString($bytes, 2, $bytes.Length - 2); } else { $content = $utf8.GetString($bytes); } } } [System.IO.File]::WriteAllText('%temp_file%', $content, [System.Text.Encoding]::GetEncoding(932)); } catch { exit 1 }"
 
 if %ERRORLEVEL% NEQ 0 (
     echo エラー: "%file%" の変換に失敗しました。
