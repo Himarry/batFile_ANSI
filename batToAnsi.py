@@ -27,6 +27,30 @@ from pathlib import Path
 import traceback
 
 
+def create_backup(file_path):
+    """元のファイルのバックアップを作成する"""
+    try:
+        # バックアップファイル名を生成（元のファイル名 + .backup + タイムスタンプ）
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        backup_path = f"{file_path}.backup_{timestamp}"
+        
+        # バックアップファイルが既に存在する場合は連番を追加
+        counter = 1
+        original_backup_path = backup_path
+        while os.path.exists(backup_path):
+            backup_path = f"{original_backup_path}_{counter}"
+            counter += 1
+        
+        # ファイルをコピー
+        shutil.copy2(file_path, backup_path)
+        print(f"  - バックアップを作成しました: {backup_path}")
+        return backup_path
+    except Exception as e:
+        print(f"エラー: バックアップの作成に失敗しました: {e}")
+        return None
+
+
 def detect_encoding(file_path):
     """ファイルのエンコーディングを検出する"""
     try:
@@ -73,7 +97,11 @@ def convert_to_ansi(file_path):
         
     print(f"処理中: {file_path}")
     
-    # エンコーディング検出
+    # 元のファイルのバックアップを作成
+    backup_path = create_backup(file_path)
+    if backup_path is None:
+        return False
+      # エンコーディング検出
     encoding, raw_data = detect_encoding(file_path)
     if encoding is None or raw_data is None:
         return False
@@ -87,15 +115,28 @@ def convert_to_ansi(file_path):
         try:
             # 検出されたエンコーディングでデコード
             content = raw_data.decode(encoding, errors='replace')
-            
-            # ANSI(CP932)で書き出す
+              # ANSI(CP932)で書き出す
             with open(temp_path, 'w', encoding='cp932', errors='replace') as f:
                 f.write(content)
                 
             # 一時ファイルを元のファイルにコピー
             shutil.copy2(temp_path, file_path)
             print(f"変換完了: {file_path}")
+            print(f"  - バックアップファイル: {backup_path}")
+            
+            # 古いバックアップファイルを削除（最新5個を保持）
+            cleanup_old_backups(file_path, keep_count=5)
+            
             return True
+        except Exception as conversion_error:
+            # 変換に失敗した場合、バックアップから復元
+            print(f"エラー: ファイル変換中に問題が発生しました: {conversion_error}")
+            try:
+                shutil.copy2(backup_path, file_path)
+                print(f"  - バックアップから復元しました: {file_path}")
+            except Exception as restore_error:
+                print(f"  - 復元にも失敗しました: {restore_error}")
+            return False
         finally:
             # 一時ファイルを削除
             try:
@@ -107,6 +148,35 @@ def convert_to_ansi(file_path):
         print(f"エラー: ファイル変換中に問題が発生しました: {e}")
         print(traceback.format_exc())
         return False
+
+
+def cleanup_old_backups(file_path, keep_count=5):
+    """古いバックアップファイルを削除する（最新のkeep_count個のみ保持）"""
+    try:
+        dir_path = os.path.dirname(file_path)
+        if not dir_path:  # ディレクトリパスが空の場合、現在のディレクトリを使用
+            dir_path = '.'
+        base_name = os.path.basename(file_path)
+        
+        # バックアップファイルを検索
+        backup_files = []
+        for file in os.listdir(dir_path):
+            if file.startswith(f"{base_name}.backup_"):
+                backup_path = os.path.join(dir_path, file)
+                backup_files.append((backup_path, os.path.getmtime(backup_path)))
+        
+        # 作成時間順にソート（新しい順）
+        backup_files.sort(key=lambda x: x[1], reverse=True)
+        
+        # 古いバックアップファイルを削除
+        for backup_path, _ in backup_files[keep_count:]:
+            try:
+                os.remove(backup_path)
+                print(f"  - 古いバックアップを削除しました: {backup_path}")
+            except Exception as e:
+                print(f"  - バックアップファイルの削除に失敗: {backup_path}, {e}")
+    except Exception as e:
+        print(f"  - バックアップファイルのクリーンアップ中にエラー: {e}")
 
 
 def process_directory(dir_path):
@@ -132,7 +202,7 @@ def main():
     """メイン処理"""
     print("=" * 50)
     print("  batファイルのエンコードをANSI(CP932)に変換するツール")
-    print("  バージョン: 1.0 (Python版)")
+    print("  バージョン: 1.1 (Python版 - バックアップ機能付き)")
     print("=" * 50)
     print("\n使用方法:")
     print(" 1. 個別のbatファイル: ファイルをドラッグアンドドロップするか、パスを入力")

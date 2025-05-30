@@ -1,76 +1,152 @@
-@echo off
-setlocal EnableDelayedExpansion
-chcp 932 > nul
-title batƒtƒ@ƒCƒ‹ƒGƒ“ƒR[ƒh•ÏŠ·ƒc[ƒ‹ - exeì¬
-
-echo ================================================
-echo   batToAnsi.py‚ðexeƒtƒ@ƒCƒ‹‚ÉƒRƒ“ƒpƒCƒ‹‚µ‚Ü‚·
-echo ================================================
-echo.
-echo ‚±‚Ìˆ—‚ðŽÀs‚·‚é‚ÆAPythonƒXƒNƒŠƒvƒg‚ªŽÀs‰Â”\‚È
-echo ƒXƒ^ƒ“ƒhƒAƒƒ“‚Ìexeƒtƒ@ƒCƒ‹‚É•ÏŠ·‚³‚ê‚Ü‚·B
-echo.
-echo •K—v‚Èƒ‰ƒCƒuƒ‰ƒŠ:
-echo  - pyinstaller (ƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎŽ©“®“I‚ÉƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·)
-echo.
-echo ‘±s‚·‚é‚É‚Í‰½‚©ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢...
-pause >nul
-
-REM Python‚ªŽg—p‰Â”\‚©ƒ`ƒFƒbƒN
-where python >nul 2>nul
-if %ERRORLEVEL% NEQ 0 (
-    echo ƒGƒ‰[: Python‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B
-    echo Python‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ä‚­‚¾‚³‚¢: https://www.python.org/downloads/
-    pause
-    exit /b 1
-)
-
-REM pyinstaller‚ªƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
-python -c "import PyInstaller" >nul 2>nul
-if %ERRORLEVEL% NEQ 0 (
-    echo PyInstaller‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·...
-    python -m pip install pyinstaller
-    if %ERRORLEVEL% NEQ 0 (
-        echo ƒGƒ‰[: PyInstaller‚ÌƒCƒ“ƒXƒg[ƒ‹‚ÉŽ¸”s‚µ‚Ü‚µ‚½B
-        echo Žè“®‚ÅƒCƒ“ƒXƒg[ƒ‹‚µ‚Ä‚­‚¾‚³‚¢: pip install pyinstaller
-        pause
-        exit /b 1
-    )
-)
-
-REM chardetƒ‰ƒCƒuƒ‰ƒŠ‚ª‘¶Ý‚·‚é‚©ƒ`ƒFƒbƒN
-python -c "import chardet" >nul 2>nul
-if %ERRORLEVEL% NEQ 0 (
-    echo chardetƒ‰ƒCƒuƒ‰ƒŠ‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·...
-    python -m pip install chardet
-    if %ERRORLEVEL% NEQ 0 (
-        echo ƒGƒ‰[: chardetƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒCƒ“ƒXƒg[ƒ‹‚ÉŽ¸”s‚µ‚Ü‚µ‚½B
-        echo Žè“®‚ÅƒCƒ“ƒXƒg[ƒ‹‚µ‚Ä‚­‚¾‚³‚¢: pip install chardet
-        pause
-        exit /b 1
-    )
-)
-
-echo.
-echo PyInstaller‚Åexeƒtƒ@ƒCƒ‹‚ðƒrƒ‹ƒh‚µ‚Ä‚¢‚Ü‚·...
-echo.
-
-REM pyinstaller‚Åexeƒtƒ@ƒCƒ‹‚ðƒrƒ‹ƒh
-pyinstaller --onefile --windowed --icon=NONE --name=batToAnsi "%~dp0batToAnsi.py"
-
-if %ERRORLEVEL% NEQ 0 (
-    echo.
-    echo ƒGƒ‰[: exeƒtƒ@ƒCƒ‹‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B
-    pause
-    exit /b 1
-)
-
-echo.
-echo ƒrƒ‹ƒh‚ªŠ®—¹‚µ‚Ü‚µ‚½I
-echo.
-echo ŽÀsƒtƒ@ƒCƒ‹‚ÍˆÈ‰º‚ÌêŠ‚É‚ ‚è‚Ü‚·:
-echo %~dp0dist\batToAnsi.exe
-echo.
-echo ‚±‚Ìƒtƒ@ƒCƒ‹‚ð”CˆÓ‚ÌêŠ‚ÉƒRƒs[‚µ‚ÄŽg—p‚Å‚«‚Ü‚·B
-echo.
-pause
+@echo off
+
+setlocal EnableDelayedExpansion
+
+chcp 932 > nul
+
+title batï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½ÏŠï¿½ï¿½cï¿½[ï¿½ï¿½ - exeï¿½ì¬
+
+
+
+echo ================================================
+
+echo   batToAnsi.pyï¿½ï¿½exeï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÉƒRï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½
+
+echo ================================================
+
+echo.
+
+echo ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ÆAPythonï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½ï¿½ï¿½sï¿½Â”\ï¿½ï¿½
+
+echo ï¿½Xï¿½^ï¿½ï¿½ï¿½hï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½exeï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½É•ÏŠï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+
+echo.
+
+echo ï¿½Kï¿½vï¿½Èƒï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½:
+
+echo  - pyinstaller (ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ÎŽï¿½ï¿½ï¿½ï¿½Iï¿½ÉƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)
+
+echo.
+
+echo ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½É‚Í‰ï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...
+
+pause >nul
+
+
+
+REM Pythonï¿½ï¿½ï¿½gï¿½pï¿½Â”\ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½N
+
+where python >nul 2>nul
+
+if %ERRORLEVEL% NEQ 0 (
+
+    echo ï¿½Gï¿½ï¿½ï¿½[: Pythonï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½B
+
+    echo Pythonï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: https://www.python.org/downloads/
+
+    pause
+
+    exit /b 1
+
+)
+
+
+
+REM pyinstallerï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
+
+python -c "import PyInstaller" >nul 2>nul
+
+if %ERRORLEVEL% NEQ 0 (
+
+    echo PyInstallerï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½...
+
+    python -m pip install pyinstaller
+
+    if %ERRORLEVEL% NEQ 0 (
+
+        echo ï¿½Gï¿½ï¿½ï¿½[: PyInstallerï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ÉŽï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B
+
+        echo ï¿½è“®ï¿½ÅƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: pip install pyinstaller
+
+        pause
+
+        exit /b 1
+
+    )
+
+)
+
+
+
+REM chardetï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
+
+python -c "import chardet" >nul 2>nul
+
+if %ERRORLEVEL% NEQ 0 (
+
+    echo chardetï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½...
+
+    python -m pip install chardet
+
+    if %ERRORLEVEL% NEQ 0 (
+
+        echo ï¿½Gï¿½ï¿½ï¿½[: chardetï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ÉŽï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B
+
+        echo ï¿½è“®ï¿½ÅƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: pip install chardet
+
+        pause
+
+        exit /b 1
+
+    )
+
+)
+
+
+
+echo.
+
+echo PyInstallerï¿½ï¿½exeï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½...
+
+echo.
+
+
+
+REM pyinstallerï¿½ï¿½exeï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½h
+
+pyinstaller --onefile --windowed --icon=NONE --name=batToAnsi "%~dp0batToAnsi.py"
+
+
+
+if %ERRORLEVEL% NEQ 0 (
+
+    echo.
+
+    echo ï¿½Gï¿½ï¿½ï¿½[: exeï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ìì¬ï¿½ÉŽï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B
+
+    pause
+
+    exit /b 1
+
+)
+
+
+
+echo.
+
+echo ï¿½rï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½I
+
+echo.
+
+echo ï¿½ï¿½ï¿½sï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÍˆÈ‰ï¿½ï¿½ÌêŠï¿½É‚ï¿½ï¿½ï¿½Ü‚ï¿½:
+
+echo %~dp0dist\batToAnsi.exe
+
+echo.
+
+echo ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½Cï¿½Ó‚ÌêŠï¿½ÉƒRï¿½sï¿½[ï¿½ï¿½ï¿½ÄŽgï¿½pï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½B
+
+echo.
+
+pause
+
